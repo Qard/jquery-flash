@@ -6,7 +6,7 @@
 <link type="text/css" rel="stylesheet" href="http://www.stephenbelanger.com/wp-content/themes/vanilla-cart/prettify.css" /> 
 <script type="text/javascript" src="http://www.stephenbelanger.com/wp-content/themes/vanilla-cart/prettify.js"></script> 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script> 
-<script type="text/javascript" src="js/jquery.flash.js"></script> 
+<script type="text/javascript" src="js//jquery.flash.min_.js"></script> 
 <script type="text/javascript"> 
 $(document).ready(function(){
 	$('#flash').flash({allowfullscreen:true,allowscriptaccess:'always'});

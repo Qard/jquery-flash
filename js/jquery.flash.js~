@@ -1,5 +1,5 @@
 /*
-jquery.flash v1.3.2 -  18/02/10
+jquery.flash v1.3.1 -  02/01/10
 (c)2009 Stephen Belanger - MIT/GPL.
 http://docs.jquery.com/License
 */
@@ -59,10 +59,7 @@ $.fn.extend({
         	
 			// Finally, we're on to the REAL action.
 		    $(this).each(function () {
-		    	// Create a reference to the current item as a jquery object.
 				var e = $(this);
-				
-				// Merge settings objects.
 				var s = $.extend({
 						'id': e.attr('id'),
 						'class': e.attr('class'),
@@ -75,15 +72,9 @@ $.fn.extend({
 						'availparams': ['src', 'bgcolor', 'quality', 'allowscriptaccess', 'allowfullscreen', 'flashvars', 'wmode'],
 						'version': '9.0.24'
 					}, opt);
-				
-				// Collect list of attributes and parameters to use.
 				var a = s.availattrs;
                 var b = s.availparams;
-                
-                // Get required version array.
 				var rv = s.version.split('.');
-				
-				// Open output string.
 				var o = '<object';
 				
 				// Set codebase, if not supplied in the settings.
