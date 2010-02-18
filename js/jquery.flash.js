@@ -3,59 +3,66 @@ jquery.flash v1.3.2 -  18/02/10
 (c)2009 Stephen Belanger - MIT/GPL.
 http://docs.jquery.com/License
 */
-// IE uses a 5 year old version of Javascript, so let's add the missing indexOf method in manually.
-Array.prototype.indexOf = function(o,i){
-	for(var j = this.length, i = i < 0 ? i + j < 0 ? 0 : i + j : i || 0; i < j && this[i] !== o; i++);
-	return j <= i ? - 1 : i;
+// IE also doesn't have navigator.plugins, it uses ActiveXObject instead. >.>
+isie = function() {
+	var p = navigator.plugins; return (p && p.length)
+		? false
+		: true;
 };
 
-// IE also doesn't have navigator.plugins, it uses ActiveXObject instead. >.>
-$.fn.extend({
-	// Check if browser is IE.
-	isie: function() { var p = navigator.plugins; return (p && p.length) ? false : true; },
-});
+if(isie()) {
+	// IE uses a 5 year old version of Javascript, so let's add the missing indexOf method in manually.
+	Array.prototype.indexOf = function(o,i){
+		for(var j = this.length, i = i < 0 ? i + j < 0 ? 0 : i + j : i || 0; i < j && this[i] !== o; i++);
+		return j <= i ? - 1 : i;
+	};
+}
+
+// Check if browser has flash installed.
+hasflash = function() {
+	return (flashversion())
+		? true
+		: false;
+};
+
+// Check what version of flash is installed.
+flashversion = function() {
+	if(isie()) {
+        try {
+            var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
+        } catch(e) {
+            try {
+                var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
+                return [6, 0, 21];
+            } catch(e) {};
+            try {
+                axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+            } catch(e) {};
+        }
+        if (axo != null) {
+            return axo.GetVariable("$version").split(" ")[1].split(",");
+        }
+	} else {
+		var p = navigator.plugins;
+        var f = p['Shockwave Flash'];
+        if (f && f.description)
+        	return f.description.replace(/([a-zA-Z]|\s)+/, "").replace(/(\s+r|\s+b[0-9]+)/, ".").split(".");
+        else if (p['Shockwave Flash 2.0'])
+            return '2.0.0.11';
+    }
+};
 
 // Ok, enough fixing of IE's inadequacies, let's get on with it!
 $.fn.extend({
-	// Check if browser has flash.
-	hasflash: function() { return (this.flashversion) ? true : false; },
-	// Check which version of flash is installed.
-	flashversion: $(this).isie()
-		? function() {
-            try {
-                var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
-            } catch(e) {
-                try {
-                    var axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
-                    return [6, 0, 21];
-                } catch(e) {};
-                try {
-                    axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
-                } catch(e) {};
-            }
-            if (axo != null) {
-                return axo.GetVariable("$version").split(" ")[1].split(",");
-            }
-		}
-		: function() {
-			var p = navigator.plugins;
-            var f = p['Shockwave Flash'];
-            if (f && f.description)
-            	return f.description.replace(/([a-zA-Z]|\s)+/, "").replace(/(\s+r|\s+b[0-9]+)/, ".").split(".");
-            else if (p['Shockwave Flash 2.0'])
-                return '2.0.0.11';
-            else
-            	return false;
-		},
     flash: function (opt) {
 		// Let's make some handy functions to minimize code repetition.
         function attr(a, b) { return ' ' + a + '="' + b + '"'; }
         function param(a, b) { return '<param name="' + a + '" value="' + b + '" />'; }
 		
 		// Don't even bother if we don't have Flash installed.
-        if ($(this).hasflash()) {
+        if (hasflash()) {
         	// Get current version for express install checking.
-        	var cv = $(this).flashversion();
+        	var cv = flashversion();
         	
 			// Finally, we're on to the REAL action.
 		    $(this).each(function () {
@@ -78,7 +85,7 @@ $.fn.extend({
 				
 				// Collect list of attributes and parameters to use.
 				var a = s.availattrs;
-                var b = s.availparams;
+                var p = s.availparams;
                 
                 // Get required version array.
 				var rv = s.version.split('.');
@@ -109,7 +116,7 @@ $.fn.extend({
                 }
 				
 				// Set browser-specific attributes
-                a = $(this).isie() ? a.concat(['classid', 'codebase']) : a.concat(['pluginspage']);
+                a = isie() ? a.concat(['classid', 'codebase']) : a.concat(['pluginspage']);
 				
 				// Add attributes to output buffer.
                 for (k in a) {
@@ -119,9 +126,9 @@ $.fn.extend({
                 o += '>';
 				
 				// Add parameters to output buffer.
-                for (k in b) {
-                    var n = (k == b.indexOf('src')) ? 'movie' : b[k];
-                    o += s[b[k]] ? param(n, s[b[k]]) : '';
+                for (k in p) {
+                    var n = (k == p.indexOf('src')) ? 'movie' : p[k];
+                    o += s[p[k]] ? param(n, s[p[k]]) : '';
                 };
 				
 				// Close and swap.
