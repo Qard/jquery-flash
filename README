@@ -1,5 +1,3 @@
-View index.html and look at the code to see a usage example.
-
 Use jquery-flash like this;
 
 <script type="text/javascript">
@@ -38,3 +36,10 @@ to a youtube video object. jquery-flash will automagically inherit classes, ids,
 </script>
 
 Express Install is supported by adding an 'express' line to the constructor json object with the url of the express install swf. If the user's flash version is less than the number specified by 'version' express install will be place in place of the one provided in 'src'. If no flash is installed the original element will be left completely untouched, so it's easy to put in a "no flash" image and replace it with jquery-flash.
+
+jquery-flash adds 3 extra functions now;
+isie(); // returns boolean
+hasflash(); // returns boolean
+flashversion(); // returns array ["10","0","45"]
+
+Everything else functions exactly the same way, it's just a little more flexible now. :)
