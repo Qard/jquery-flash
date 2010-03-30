@@ -95,7 +95,7 @@ $.fn.extend({
 				
 				// Set codebase, if not supplied in the settings.
                 if (!s.codebase) {
-                    s.codebase = 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=' + rv.join(',');
+                    s.codebase = (("https:" == document.location.protocol) ? 'https://' : 'http://')+'download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=' + rv.join(',');
                 }
 				
 				// Use express install swf, if necessary.
