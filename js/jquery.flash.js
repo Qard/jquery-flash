@@ -78,7 +78,8 @@ $.fn.extend({
 						'src': e.attr('href'),
 						'classid': 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000',
 						'pluginspace': 'http://get.adobe.com/flashplayer',
-						'availattrs': ['id', 'class', 'width', 'height', 'src'],
+						'type': 'application/x-shockwave-flash',
+						'availattrs': ['id', 'class', 'width', 'height', 'src', 'type'],
 						'availparams': ['src', 'bgcolor', 'quality', 'allowscriptaccess', 'allowfullscreen', 'flashvars', 'wmode'],
 						'version': '9.0.24'
 					}, opt);
